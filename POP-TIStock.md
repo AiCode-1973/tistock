@@ -1,8 +1,9 @@
 # POP — Controle de Estoque de TI no Sistema TIStock
 
 **Documento:** POP-TI-001  
-**Versão:** 1.0  
+**Versão:** 1.1  
 **Data de emissão:** Abril/2026  
+**Última atualização:** Abril/2026  
 **Setor responsável:** Tecnologia da Informação  
 **Aplicável a:** Técnicos e Analistas de TI  
 
@@ -24,9 +25,11 @@ Este procedimento se aplica a todos os colaboradores do setor de TI que realizam
 
 | Perfil | Responsabilidade |
 |---|---|
-| **Administrador** | Gerenciar usuários, categorias, configurações e zerar dados do sistema |
-| **Técnico** | Registrar entradas, saídas e empréstimos; devolver equipamentos |
+| **Administrador** | Gerenciar usuários, categorias e log de auditoria; zerar dados do sistema; todas as ações do Técnico |
+| **Técnico** | Registrar entradas, saídas e empréstimos; devolver equipamentos; imprimir recibos |
 | **Consultor** | Consultar estoque, histórico e relatórios (somente leitura) |
+
+> 📌 Todos os perfis podem alterar sua própria senha pelo menu do usuário no canto superior direito.
 
 ---
 
@@ -37,6 +40,15 @@ Este procedimento se aplica a todos os colaboradores do setor de TI que realizam
 3. Clique em **Entrar**
 
 > ⚠️ Em caso de esquecimento de senha, solicite a redefinição ao Administrador do sistema.
+
+### Trocar Senha
+
+Qualquer usuário pode alterar sua própria senha a qualquer momento:
+
+1. Clique no seu **nome** no canto superior direito da tela
+2. Selecione **Trocar Senha**
+3. Informe a senha atual, a nova senha (mínimo 8 caracteres) e confirme
+4. Clique em **Alterar Senha**
 
 ---
 
@@ -154,7 +166,83 @@ Este procedimento se aplica a todos os colaboradores do setor de TI que realizam
 
 ---
 
-## 10. Alertas e Situações de Atenção
+## 10. Gestão de Categorias *(Administrador)*
+
+As categorias organizam os itens do estoque (ex.: Hardware, Software, Periférico).
+
+### Cadastrar nova categoria
+
+1. Acesse **Administração → Categorias**
+2. Clique em **Nova Categoria**
+3. Informe o nome e, opcionalmente, uma descrição
+4. Clique em **Salvar**
+
+### Editar categoria
+
+1. Na lista de categorias, clique no ícone ✏️ da categoria desejada
+2. Altere os dados e clique em **Salvar Alterações**
+
+### Excluir categoria
+
+1. Na lista, clique no ícone 🗑️ — disponível apenas se **não houver itens vinculados**
+2. Confirme a exclusão no modal exibido
+
+> ⚠️ Categorias com itens vinculados não podem ser excluídas. Remova ou reatribua os itens antes.
+
+---
+
+## 11. Log de Auditoria *(Administrador)*
+
+O sistema registra automaticamente todas as ações realizadas pelos usuários.
+
+### Acessar o log
+
+1. Acesse **Administração → Log de Auditoria**
+2. Use os filtros disponíveis para refinar a busca:
+
+   | Filtro | Descrição |
+   |---|---|
+   | **Buscar** | Pesquisa por descrição, nome de usuário ou IP |
+   | **Ação** | Filtra por tipo de ação (login, entrada_estoque, etc.) |
+   | **Usuário** | Filtra por usuário específico |
+   | **De / Até** | Filtra por período de data |
+
+3. Clique em **Exportar CSV** para baixar os registros filtrados em planilha
+
+### Ações registradas automaticamente
+
+| Ação | Descrição |
+|---|---|
+| `login` | Acesso bem-sucedido ao sistema |
+| `login_falhou` | Tentativa de login com credenciais incorretas |
+| `logout` | Encerramento de sessão |
+| `entrada_estoque` | Registro de entrada de material |
+| `saida_estoque` | Registro de saída de material |
+| `emprestimo_novo` | Novo empréstimo registrado |
+| `emprestimo_devolucao` | Devolução de empréstimo registrada |
+| `item_cadastrado` | Novo item adicionado ao estoque |
+| `item_excluido` | Item desativado do estoque |
+| `sistema_zerado` | Dados zerados pelo administrador |
+
+---
+
+## 12. Zerar Sistema *(Administrador)*
+
+> ⚠️ **Atenção:** Esta operação é **irreversível**. Realize um backup antes de prosseguir.
+
+Permite excluir dados operacionais selecionados (empréstimos, movimentações, itens ou categorias sem itens).
+
+1. Acesse **Administração → Zerar Sistema**
+2. Marque apenas os dados que deseja excluir permanentemente
+3. Digite exatamente a frase de confirmação exibida na tela: `CONFIRMO ZERAR O SISTEMA`
+4. O botão será habilitado — clique em **Zerar Dados Selecionados**
+5. Verifique o resumo dos registros excluídos exibido após a operação
+
+> 📌 A ação é registrada no Log de Auditoria com os detalhes do que foi excluído.
+
+---
+
+## 13. Alertas e Situações de Atenção
 
 | Situação | O que fazer |
 |---|---|
@@ -165,7 +253,7 @@ Este procedimento se aplica a todos os colaboradores do setor de TI que realizam
 
 ---
 
-## 11. Regras Gerais
+## 14. Regras Gerais
 
 - **Todo** recebimento, distribuição ou empréstimo de equipamento **deve ser registrado** no sistema no mesmo dia da ocorrência
 - Não realizar movimentações retroativas sem autorização do Administrador
@@ -175,11 +263,12 @@ Este procedimento se aplica a todos os colaboradores do setor de TI que realizam
 
 ---
 
-## 12. Histórico de Revisões
+## 15. Histórico de Revisões
 
 | Versão | Data | Descrição | Responsável |
 |---|---|---|---|
 | 1.0 | Abril/2026 | Emissão inicial | Setor de TI |
+| 1.1 | Abril/2026 | Inclusão: Log de Auditoria, Gestão de Categorias, Zerar Sistema, Trocar Senha, busca por patrimônio/série nas movimentações, recibo de empréstimo | Setor de TI |
 
 ---
 
