@@ -128,6 +128,12 @@ $isActive = fn(string $page): string => ($activePage === $page) ? 'active' : '';
                 <span class="sidebar-section-label px-3">Administração</span>
             </li>
             <li class="nav-item">
+                <a href="<?= BASE_URL ?>/pages/categorias/listar.php"
+                   class="sidebar-link rounded <?= $isActive('categorias') ?>">
+                    <i class="fas fa-tags me-2 fa-fw"></i>Categorias
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="<?= BASE_URL ?>/pages/usuarios/listar.php"
                    class="sidebar-link rounded <?= $isActive('usuarios') ?>">
                     <i class="fas fa-users-cog me-2 fa-fw"></i>Usuários
