@@ -20,6 +20,7 @@ if (!$item) {
 // Desativação lógica: preserva o histórico
 $pdo->prepare("UPDATE itens SET ativo = 0 WHERE id = ?")->execute([$id]);
 
+registrarLog($pdo, 'item_excluido', "Item desativado: \"{$item['nome']}\" (ID {$id})");
 setFlash('success', 'Item "' . htmlspecialchars($item['nome']) . '" removido do estoque.');
 header('Location: ' . BASE_URL . '/pages/itens/listar.php');
 exit;

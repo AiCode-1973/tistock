@@ -86,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
         }
 
+        registrarLog($pdo, 'item_cadastrado', "Item cadastrado: \"{$dados['nome']}\" | Qtd: {$dados['quantidade_atual']}");
         setFlash('success', 'Item "' . htmlspecialchars($dados['nome']) . '" cadastrado com sucesso!');
         header('Location: ' . BASE_URL . '/pages/itens/listar.php');
         exit;

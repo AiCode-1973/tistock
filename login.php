@@ -25,10 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $erro = 'Formato de e-mail inválido.';
     } elseif (loginUsuario($pdo, $email, $senha)) {
+        registrarLog($pdo, 'login', "Login realizado com sucesso. E-mail: {$email}");
         header('Location: ' . BASE_URL . '/pages/dashboard.php');
         exit;
     } else {
         $erro = 'E-mail ou senha incorretos. Verifique os dados e tente novamente.';
+        registrarLog($pdo, 'login_falhou', "Tentativa de login com e-mail: " . htmlspecialchars($email, ENT_QUOTES, 'UTF-8'), null, $email);
     }
 }
 ?>

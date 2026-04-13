@@ -140,6 +140,12 @@ $isActive = fn(string $page): string => ($activePage === $page) ? 'active' : '';
                 </a>
             </li>
             <li class="nav-item">
+                <a href="<?= BASE_URL ?>/pages/admin/logs.php"
+                   class="sidebar-link rounded <?= $isActive('logs') ?>">
+                    <i class="fas fa-clipboard-list me-2 fa-fw"></i>Log de Auditoria
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="<?= BASE_URL ?>/pages/admin/zerar.php"
                    class="sidebar-link rounded <?= $isActive('zerar') ?>"
                    style="color:#ff6b6b !important;">

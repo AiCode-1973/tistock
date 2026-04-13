@@ -57,6 +57,7 @@ try {
 
     $pdo->commit();
 
+    registrarLog($pdo, 'emprestimo_devolucao', "Devolução de \"{$emprestimo['item_nome']}\" ({$emprestimo['quantidade']} un.) de {$emprestimo['solicitante']} — {$emprestimo['setor_destino']}");
     setFlash('success', "Devolução de \"{$emprestimo['item_nome']}\" registrada com sucesso!");
 
 } catch (Exception $e) {

@@ -181,3 +181,32 @@ function paginar(int $total, int $porPagina, int $paginaAtual): array
         'proximo'       => min($totalPaginas, $paginaAtual + 1),
     ];
 }
+
+// ----------------------------------------
+// Log de Auditoria
+// ----------------------------------------
+
+/**
+ * Registra uma ação de auditoria na tabela logs.
+ * Se $usuarioId/$usuarioNome não forem passados, usa a sessão atual.
+ */
+function registrarLog(
+    PDO $pdo,
+    string $acao,
+    string $descricao,
+    ?int $usuarioId   = null,
+    ?string $usuarioNome = null
+): void {
+    try {
+        $uid   = $usuarioId   ?? ($_SESSION['usuario_id']   ?? null);
+        $unome = $usuarioNome ?? ($_SESSION['usuario_nome'] ?? '');
+        $ip    = $_SERVER['REMOTE_ADDR'] ?? '';
+
+        $pdo->prepare(
+            "INSERT INTO logs (usuario_id, usuario_nome, acao, descricao, ip) VALUES (?, ?, ?, ?, ?)"
+        )->execute([$uid, $unome, $acao, $descricao, $ip]);
+    } catch (Exception $e) {
+        // Falha no log não deve interromper o fluxo da aplicação
+        error_log('[TI Stock] Erro ao registrar log: ' . $e->getMessage());
+    }
+}

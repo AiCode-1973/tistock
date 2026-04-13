@@ -49,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $pdo->commit();
 
+                registrarLog($pdo, 'entrada_estoque', "Entrada de {$qtd} unidade(s) de \"{$item['nome']}\" | Motivo: {$motivo}");
                 setFlash('success', "Entrada de {$qtd} unidade(s) de \"{$item['nome']}\" registrada com sucesso!");
                 header('Location: ' . BASE_URL . '/pages/movimentacoes/listar.php');
                 exit;

@@ -58,6 +58,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->commit();
             $sucesso = true;
 
+            $tabelasZeradas = array_filter([
+                $zerarEmps  ? 'Empréstimos' : null,
+                $zerarMovs  ? 'Movimentações' : null,
+                $zerarItens ? 'Itens' : null,
+                $zerarCats  ? 'Categorias' : null,
+            ]);
+            registrarLog($pdo, 'sistema_zerado', 'Dados zerados: ' . implode(', ', $tabelasZeradas));
+
         } catch (Exception $e) {
             $pdo->rollBack();
             $erros[] = 'Erro durante a operação: ' . $e->getMessage();

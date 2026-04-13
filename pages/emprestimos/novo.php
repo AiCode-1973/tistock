@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $pdo->commit();
 
+                registrarLog($pdo, 'emprestimo_novo', "Empréstimo de \"{$item['nome']}\" ({$qtd} un.) para {$solicitante} — {$setor}");
                 setFlash('success', "Empréstimo de \"{$item['nome']}\" registrado com sucesso!");
                 header('Location: ' . BASE_URL . '/pages/emprestimos/listar.php');
                 exit;
