@@ -122,6 +122,18 @@ $isActive = fn(string $page): string => ($activePage === $page) ? 'active' : '';
                 </a>
             </li>
 
+            <!-- ---- Documentos ---- -->
+            <li class="nav-item mt-2">
+                <span class="sidebar-section-label px-3">Documentos</span>
+            </li>
+            <li class="nav-item">
+                <a href="<?= BASE_URL ?>/images/<?= rawurlencode('POP — Controle de Estoque de TI no Sistema TIStock.docx') ?>"
+                   class="sidebar-link rounded <?= $isActive('pop') ?>"
+                   target="_blank" download="POP-TIStock.docx">
+                    <i class="fas fa-file-word me-2 fa-fw" style="color:#2b9af3;"></i>POP TIStock
+                </a>
+            </li>
+
             <!-- ---- Administração ---- -->
             <?php if (hasPermission('administrador')): ?>
             <li class="nav-item mt-2">

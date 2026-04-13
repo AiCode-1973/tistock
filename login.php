@@ -108,8 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Sistema -->
             <p class="text-center text-white-50 small mt-3">
-                <?= APP_NAME ?> &copy; <?= date('Y') ?> &mdash; Setor de TI Hospitalar
-            </p>
+                <?= APP_NAME ?> &copy; <?= date('Y') ?> &mdash; Desenvolvido por: AiCode  </p>
         </div>
     </div>
 </div>
