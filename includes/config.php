@@ -19,7 +19,7 @@ define('DB_CHARSET', 'utf8mb4');
 // Configurações da Aplicação
 // URL base sem barra final. Ex: '/tistock' para http://localhost/tistock
 // ----------------------------------------
-define('BASE_URL',     '/tistock');
+define('BASE_URL',     'https://tistock.aicode.dev.br');
 define('APP_NAME',     'TI Stock');
 define('APP_SUBTITLE', 'Controle de Estoque – Setor de TI');
 define('APP_VERSION',  '1.0.0');
