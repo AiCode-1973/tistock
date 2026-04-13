@@ -97,6 +97,12 @@ atualizarEmprestimosAtrasados($pdo);
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
+                            <a class="dropdown-item" href="<?= BASE_URL ?>/pages/usuarios/trocar_senha.php">
+                                <i class="fas fa-key me-2 text-warning"></i>Trocar Senha
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
                             <a class="dropdown-item text-danger" href="<?= BASE_URL ?>/logout.php">
                                 <i class="fas fa-sign-out-alt me-2"></i>Sair
                             </a>
