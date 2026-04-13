@@ -135,7 +135,11 @@ require_once ROOT_PATH . '/includes/header.php';
                         <td class="small text-muted"><?= formatarData($emp['data_devolucao'] ?? null, true) ?></td>
                         <td class="text-center"><?= getBadgeEmprestimo($emp['status']) ?></td>
                         <?php if (hasPermission('tecnico')): ?>
-                        <td class="text-center">
+                        <td class="text-center text-nowrap">
+                            <a href="<?= BASE_URL ?>/pages/emprestimos/recibo.php?id=<?= $emp['id'] ?>"
+                               class="btn btn-outline-secondary btn-sm" title="Imprimir Recibo" target="_blank">
+                                <i class="fas fa-print"></i>
+                            </a>
                             <?php if ($emp['status'] !== 'devolvido'): ?>
                             <a href="<?= BASE_URL ?>/pages/emprestimos/devolver.php?id=<?= $emp['id'] ?>"
                                class="btn btn-success btn-sm" title="Registrar Devolução">
