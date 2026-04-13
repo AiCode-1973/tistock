@@ -10,7 +10,7 @@
 $isActive = fn(string $page): string => ($activePage === $page) ? 'active' : '';
 ?>
 
-<nav id="sidebar" class="d-flex flex-column" style="min-height:100vh;min-width:250px;background-color:#1e2a38;">
+<nav id="sidebar" class="d-flex flex-column" style="min-height:100vh;background-color:#1e2a38;">
 
     <!-- Logo / Título do sistema -->
     <div class="sidebar-brand d-flex align-items-center px-3 py-3" style="border-bottom:1px solid rgba(255,255,255,.1);">

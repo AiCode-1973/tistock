@@ -16,6 +16,19 @@ document.addEventListener('DOMContentLoaded', function () {
         sidebar.classList.add('collapsed');
     }
 
+    function atualizarBotao() {
+        if (!toggleBtn) return;
+        const collapsed = sidebar.classList.contains('collapsed');
+        const icon = toggleBtn.querySelector('i');
+        if (icon) {
+            icon.className = collapsed ? 'fas fa-indent' : 'fas fa-bars';
+        }
+        toggleBtn.title = collapsed ? 'Expandir menu' : 'Recolher menu';
+    }
+
+    // Aplica estado inicial do botão
+    atualizarBotao();
+
     if (toggleBtn && sidebar) {
         toggleBtn.addEventListener('click', function () {
             sidebar.classList.toggle('collapsed');
@@ -23,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 STORAGE_KEY,
                 sidebar.classList.contains('collapsed') ? '1' : '0'
             );
+            atualizarBotao();
         });
     }
 
