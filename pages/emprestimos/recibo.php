@@ -68,10 +68,10 @@ $numero   = str_pad($emp['id'], 6, '0', STR_PAD_LEFT);
 
         .page {
             width: 210mm;
-            min-height: 148mm;
+            min-height: 297mm;
             background: #fff;
             margin: 20px auto;
-            padding: 16mm 16mm 12mm;
+            padding: 20mm 18mm 16mm;
             border: 1px solid #dee2e6;
             box-shadow: 0 2px 12px rgba(0,0,0,.12);
         }
@@ -249,8 +249,9 @@ $numero   = str_pad($emp['id'], 6, '0', STR_PAD_LEFT);
                 border: none;
                 box-shadow: none;
                 width: 100%;
-                padding: 10mm 12mm;
+                padding: 15mm 15mm;
             }
+            @page { size: A4 portrait; margin: 0; }
         }
     </style>
 </head>
