@@ -127,10 +127,10 @@ $isActive = fn(string $page): string => ($activePage === $page) ? 'active' : '';
                 <span class="sidebar-section-label px-3">Documentos</span>
             </li>
             <li class="nav-item">
-                <a href="<?= BASE_URL ?>/images/<?= rawurlencode('POP — Controle de Estoque de TI no Sistema TIStock.docx') ?>"
+                <a href="<?= BASE_URL ?>/images/<?= rawurlencode('POP — Controle de Estoque de TI no Sistema TIStock.pdf') ?>"
                    class="sidebar-link rounded <?= $isActive('pop') ?>"
-                   target="_blank" download="POP-TIStock.docx">
-                    <i class="fas fa-file-word me-2 fa-fw" style="color:#2b9af3;"></i>POP TIStock
+                   target="_blank">
+                    <i class="fas fa-file-pdf me-2 fa-fw" style="color:#e74c3c;"></i>POP TIStock
                 </a>
             </li>
 
