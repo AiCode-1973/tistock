@@ -158,6 +158,29 @@ CREATE TABLE IF NOT EXISTS kb_anexos (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------
+-- Tabela: kb_pops
+-- Procedimentos Operacionais Padrão (POPs)
+-- ----------------------------------------
+CREATE TABLE IF NOT EXISTS kb_pops (
+    id                      INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    codigo                  VARCHAR(20)   NOT NULL UNIQUE,
+    titulo                  VARCHAR(255)  NOT NULL,
+    versao                  VARCHAR(10)   NOT NULL DEFAULT '1.0',
+    objetivo                TEXT          NOT NULL,
+    escopo                  TEXT          NOT NULL,
+    responsavel_execucao    VARCHAR(200)  NOT NULL,
+    responsavel_elaboracao  VARCHAR(200)  NOT NULL,
+    procedimento            LONGTEXT      NOT NULL,
+    referencias             TEXT          DEFAULT NULL,
+    status                  ENUM('ativo','revisao','obsoleto') NOT NULL DEFAULT 'ativo',
+    autor_id                INT UNSIGNED  DEFAULT NULL,
+    criado_em               TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em           TIMESTAMP     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_kb_pop_autor FOREIGN KEY (autor_id)
+        REFERENCES usuarios(id) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------
 -- NOTA: O usuário administrador é criado pelo install.php
 -- Acesse /tistock/install.php após executar este script
 -- ----------------------------------------

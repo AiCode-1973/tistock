@@ -152,6 +152,13 @@ $isActive = fn(string $page): string => ($activePage === $page) ? 'active' : '';
             </li>
             <?php endif; ?>
 
+            <li class="nav-item">
+                <a href="<?= BASE_URL ?>/pages/conhecimento/pops/listar.php"
+                   class="sidebar-link rounded ps-4 <?= $isActive('pops') ?>">
+                    <i class="fas fa-clipboard-check me-2 fa-fw"></i>POPs
+                </a>
+            </li>
+
             <!-- ---- Documentos ---- -->
             <li class="nav-item mt-2">
                 <span class="sidebar-section-label px-3">Documentos</span>
