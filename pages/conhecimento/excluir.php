@@ -23,6 +23,17 @@ if (!$artigo) {
     exit;
 }
 
+// Remove arquivos físicos dos anexos e os registros do banco
+$stmtA = $pdo->prepare("SELECT nome_arquivo FROM kb_anexos WHERE artigo_id = ?");
+$stmtA->execute([$id]);
+$arquivosAnexo = $stmtA->fetchAll(PDO::FETCH_COLUMN);
+$uploadDir = ROOT_PATH . '/uploads/conhecimento/';
+foreach ($arquivosAnexo as $nomeArq) {
+    $caminho = $uploadDir . $nomeArq;
+    if (is_file($caminho)) unlink($caminho);
+}
+$pdo->prepare("DELETE FROM kb_anexos WHERE artigo_id = ?")->execute([$id]);
+
 $pdo->prepare("UPDATE kb_artigos SET ativo = 0 WHERE id = ?")->execute([$id]);
 
 registrarLog($pdo, 'KB_EXCLUIR', "Artigo excluído: \"{$artigo['titulo']}\" (ID {$id})");

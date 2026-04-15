@@ -33,6 +33,11 @@ if (!$artigo) {
 $pdo->prepare("UPDATE kb_artigos SET visualizacoes = visualizacoes + 1 WHERE id = ?")
     ->execute([$id]);
 
+// Carrega anexos
+$stmtAnexos = $pdo->prepare("SELECT * FROM kb_anexos WHERE artigo_id = ? ORDER BY criado_em ASC");
+$stmtAnexos->execute([$id]);
+$anexos = $stmtAnexos->fetchAll();
+
 $pageTitle  = htmlspecialchars($artigo['titulo'], ENT_QUOTES, 'UTF-8');
 $activePage = 'conhecimento';
 
@@ -85,6 +90,49 @@ require_once ROOT_PATH . '/includes/header.php';
         </div>
     </div>
 </div>
+
+<?php if (!empty($anexos)): ?>
+<div class="card border-0 shadow-sm mt-4">
+    <div class="card-header bg-white">
+        <span class="fw-semibold"><i class="fas fa-paperclip me-2 text-muted"></i>Anexos (<?= count($anexos) ?>)</span>
+    </div>
+    <ul class="list-group list-group-flush">
+        <?php foreach ($anexos as $anx):
+            $m     = $anx['mime_type'];
+            $icone = 'fa-file-alt text-muted';
+            if ($m === 'application/pdf') $icone = 'fa-file-pdf text-danger';
+            elseif (str_contains($m, 'word')) $icone = 'fa-file-word text-primary';
+            elseif (str_contains($m, 'excel') || str_contains($m, 'spreadsheet')) $icone = 'fa-file-excel text-success';
+            elseif (str_contains($m, 'powerpoint') || str_contains($m, 'presentation')) $icone = 'fa-file-powerpoint text-warning';
+            elseif (str_starts_with($m, 'image/')) $icone = 'fa-file-image text-info';
+            elseif (str_contains($m, 'zip')) $icone = 'fa-file-archive text-secondary';
+            $kb = $anx['tamanho'] >= 1048576
+                ? round($anx['tamanho'] / 1048576, 1) . ' MB'
+                : round($anx['tamanho'] / 1024) . ' KB';
+        ?>
+        <li class="list-group-item d-flex align-items-center gap-3">
+            <i class="fas <?= $icone ?> fa-lg fa-fw"></i>
+            <span class="flex-grow-1">
+                <?= htmlspecialchars($anx['nome_original'], ENT_QUOTES, 'UTF-8') ?>
+                <small class="text-muted ms-2"><?= $kb ?></small>
+            </span>
+            <a href="<?= BASE_URL ?>/pages/conhecimento/download.php?id=<?= $anx['id'] ?>"
+               class="btn btn-outline-secondary btn-sm" title="Baixar">
+                <i class="fas fa-download"></i>
+            </a>
+            <?php if (hasPermission('tecnico')): ?>
+            <a href="<?= BASE_URL ?>/pages/conhecimento/anexo_excluir.php?id=<?= $anx['id'] ?>&artigo=<?= $artigo['id'] ?>"
+               class="btn btn-outline-danger btn-sm"
+               title="Excluir anexo"
+               onclick="return confirm('Excluir o anexo &quot;<?= htmlspecialchars(addslashes($anx['nome_original']), ENT_QUOTES, 'UTF-8') ?>&quot;?')">
+                <i class="fas fa-times"></i>
+            </a>
+            <?php endif; ?>
+        </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+<?php endif; ?>
 
 <?php if (hasPermission('tecnico')): ?>
 <div class="modal fade" id="modalExcluir" tabindex="-1">

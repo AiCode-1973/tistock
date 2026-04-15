@@ -142,6 +142,22 @@ CREATE TABLE IF NOT EXISTS kb_artigos (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------
+-- Tabela: kb_anexos
+-- Arquivos anexados a artigos da base de conhecimento
+-- ----------------------------------------
+CREATE TABLE IF NOT EXISTS kb_anexos (
+    id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    artigo_id       INT UNSIGNED NOT NULL,
+    nome_original   VARCHAR(255) NOT NULL,
+    nome_arquivo    VARCHAR(64)  NOT NULL,
+    tamanho         INT UNSIGNED NOT NULL,
+    mime_type       VARCHAR(100) NOT NULL,
+    criado_em       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_kb_anexo_artigo FOREIGN KEY (artigo_id)
+        REFERENCES kb_artigos(id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------
 -- NOTA: O usuário administrador é criado pelo install.php
 -- Acesse /tistock/install.php após executar este script
 -- ----------------------------------------
