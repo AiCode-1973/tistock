@@ -110,6 +110,38 @@ INSERT INTO categorias (nome, descricao) VALUES
 ('Consumível', 'Itens consumíveis: toners, cartuchos, papel e similares');
 
 -- ----------------------------------------
+-- Tabela: kb_categorias
+-- Categorias da base de conhecimento
+-- ----------------------------------------
+CREATE TABLE IF NOT EXISTS kb_categorias (
+    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome        VARCHAR(100) NOT NULL,
+    descricao   TEXT,
+    criado_em   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------
+-- Tabela: kb_artigos
+-- Artigos/tutoriais da base de conhecimento
+-- ----------------------------------------
+CREATE TABLE IF NOT EXISTS kb_artigos (
+    id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    titulo          VARCHAR(255) NOT NULL,
+    slug            VARCHAR(280) NOT NULL UNIQUE,
+    conteudo        LONGTEXT NOT NULL,
+    categoria_id    INT UNSIGNED NULL,
+    autor_id        INT UNSIGNED NULL,
+    visualizacoes   INT UNSIGNED NOT NULL DEFAULT 0,
+    ativo           TINYINT(1) NOT NULL DEFAULT 1,
+    criado_em       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_kb_artigo_categoria FOREIGN KEY (categoria_id)
+        REFERENCES kb_categorias(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_kb_artigo_autor     FOREIGN KEY (autor_id)
+        REFERENCES usuarios(id)      ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------------------
 -- NOTA: O usuário administrador é criado pelo install.php
 -- Acesse /tistock/install.php após executar este script
 -- ----------------------------------------

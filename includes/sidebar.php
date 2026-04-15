@@ -122,6 +122,36 @@ $isActive = fn(string $page): string => ($activePage === $page) ? 'active' : '';
                 </a>
             </li>
 
+            <!-- ---- Base de Conhecimento ---- -->
+            <li class="nav-item mt-2">
+                <span class="sidebar-section-label px-3">Conhecimento</span>
+            </li>
+
+            <li class="nav-item">
+                <a href="<?= BASE_URL ?>/pages/conhecimento/index.php"
+                   class="sidebar-link rounded <?= $isActive('conhecimento') ?>">
+                    <i class="fas fa-book me-2 fa-fw"></i>Artigos
+                </a>
+            </li>
+
+            <?php if (hasPermission('tecnico')): ?>
+            <li class="nav-item">
+                <a href="<?= BASE_URL ?>/pages/conhecimento/novo.php"
+                   class="sidebar-link rounded ps-4 <?= $isActive('conhecimento_novo') ?>">
+                    <i class="fas fa-plus-circle me-2 fa-fw"></i>Novo Artigo
+                </a>
+            </li>
+            <?php endif; ?>
+
+            <?php if (hasPermission('administrador')): ?>
+            <li class="nav-item">
+                <a href="<?= BASE_URL ?>/pages/conhecimento/categorias/listar.php"
+                   class="sidebar-link rounded ps-4 <?= $isActive('kb_categorias') ?>">
+                    <i class="fas fa-folder me-2 fa-fw"></i>Categorias KB
+                </a>
+            </li>
+            <?php endif; ?>
+
             <!-- ---- Documentos ---- -->
             <li class="nav-item mt-2">
                 <span class="sidebar-section-label px-3">Documentos</span>
