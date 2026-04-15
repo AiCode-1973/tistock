@@ -39,6 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $procedimento   = trim($_POST['procedimento']                       ?? '');
     $referencias    = trim($_POST['referencias']                        ?? '');
     $status         = $_POST['status'] ?? 'ativo';
+    $dataElaboracao = trim($_POST['data_elaboracao'] ?? '');
+    if (!empty($dataElaboracao) && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dataElaboracao)) {
+        $dataElaboracao = null;
+    } elseif (empty($dataElaboracao)) {
+        $dataElaboracao = null;
+    }
 
     if (empty($codigo))                                          $erros[] = 'O código é obrigatório.';
     if (mb_strlen($codigo) > 20)                                 $erros[] = 'O código deve ter no máximo 20 caracteres.';
@@ -59,12 +65,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($erros)) {
         $pdo->prepare(
             "UPDATE kb_pops SET
-             codigo = ?, titulo = ?, versao = ?, objetivo = ?, escopo = ?,
+             codigo = ?, titulo = ?, versao = ?, data_elaboracao = ?, objetivo = ?, escopo = ?,
              responsavel_execucao = ?, responsavel_elaboracao = ?,
              procedimento = ?, referencias = ?, status = ?
              WHERE id = ?"
         )->execute([
-            $codigo, $titulo, $versao, $objetivo, $escopo,
+            $codigo, $titulo, $versao, $dataElaboracao, $objetivo, $escopo,
             $respExecucao, $respElaboracao, $procedimento,
             $referencias ?: null, $status, $id,
         ]);
@@ -142,7 +148,12 @@ require_once ROOT_PATH . '/includes/header.php';
                                    maxlength="10"
                                    value="<?= htmlspecialchars($pop['versao'], ENT_QUOTES, 'UTF-8') ?>">
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
+                            <label for="data_elaboracao" class="form-label fw-semibold">Data Elaboração</label>
+                            <input type="date" id="data_elaboracao" name="data_elaboracao" class="form-control"
+                                   value="<?= htmlspecialchars($pop['data_elaboracao'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                        </div>
+                        <div class="col-sm-5">
                             <label for="responsavel_elaboracao" class="form-label fw-semibold">Resp. Elaboração <span class="text-danger">*</span></label>
                             <input type="text" id="responsavel_elaboracao" name="responsavel_elaboracao"
                                    class="form-control" maxlength="200" required

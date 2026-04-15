@@ -92,8 +92,8 @@ require_once ROOT_PATH . '/includes/header.php';
                     <td><?= htmlspecialchars($pop['responsavel_execucao'], ENT_QUOTES, 'UTF-8') ?></td>
                 </tr>
                 <tr>
-                    <th class="text-muted fw-normal ps-3">Elaborado em</th>
-                    <td><?= formatarData($pop['criado_em']) ?></td>
+                    <th class="text-muted fw-normal ps-3">Data Elaboração</th>
+                    <td><?= $pop['data_elaboracao'] ? formatarData($pop['data_elaboracao']) : '<span class="text-muted">—</span>' ?></td>
                     <th class="text-muted fw-normal">Última revisão</th>
                     <td><?= formatarData($pop['atualizado_em']) ?></td>
                 </tr>

@@ -108,7 +108,7 @@ $linhas = [
     ['Código',          $pop['codigo'],                  'Versão',         $pop['versao']],
     ['Título',          $pop['titulo'],                  'Status',         $statusLabel],
     ['Resp. Elaboração',$pop['responsavel_elaboracao'],  'Resp. Execução', $pop['responsavel_execucao']],
-    ['Elaborado em',    formatarData($pop['criado_em']), 'Última revisão', formatarData($pop['atualizado_em'])],
+    ['Data Elaboração', $pop['data_elaboracao'] ? formatarData($pop['data_elaboracao']) : '—', 'Última revisão', formatarData($pop['atualizado_em'])],
 ];
 
 foreach ($linhas as $linha) {

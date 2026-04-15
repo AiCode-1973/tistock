@@ -166,6 +166,7 @@ CREATE TABLE IF NOT EXISTS kb_pops (
     codigo                  VARCHAR(20)   NOT NULL UNIQUE,
     titulo                  VARCHAR(255)  NOT NULL,
     versao                  VARCHAR(10)   NOT NULL DEFAULT '1.0',
+    data_elaboracao         DATE          DEFAULT NULL,
     objetivo                TEXT          NOT NULL,
     escopo                  TEXT          NOT NULL,
     responsavel_execucao    VARCHAR(200)  NOT NULL,
