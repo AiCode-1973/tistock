@@ -2,6 +2,7 @@
 /**
  * TI Stock - Gerar Recibo de Entrega de Material (PDF)
  * Suporta geração via Empréstimo (GET id) ou Avulso (POST).
+ * Agora utiliza templates dinâmicos salvos no banco de dados.
  */
 
 define('ROOT_PATH', dirname(dirname(__DIR__)));
@@ -14,6 +15,11 @@ if (!file_exists(ROOT_PATH . '/vendor/autoload.php')) {
 
 require_once ROOT_PATH . '/vendor/autoload.php';
 
+// --- BUSCAR CONFIGURAÇÕES DO RECIBO ---
+$configs = $pdo->query("SELECT chave, valor FROM configuracoes WHERE chave LIKE 'recibo_texto%'")->fetchAll(PDO::FETCH_KEY_PAIR);
+$txtDeclaracao = $configs['recibo_texto_declaracao'] ?? 'Eu, {solicitante}, lotado(a) no setor {setor}, declaro para os devidos fins que recebi do Setor de TI o(s) material(is) abaixo relacionado...';
+$txtCompromisso = $configs['recibo_texto_compromisso'] ?? 'Comprometo-me a zelar pela guarda e conservação do referido material...';
+
 $dados = null;
 $item_id = 0;
 
@@ -21,7 +27,7 @@ $item_id = 0;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['avulso'])) {
     $item_id = (int)$_POST['item_id'];
     $dados = [
-        'id'                => 0, // Avulso não tem ID de banco
+        'id'                => 0,
         'solicitante'       => $_POST['solicitante'] ?? '',
         'setor_destino'     => $_POST['setor_destino'] ?? '',
         'quantidade'        => (int)($_POST['quantidade'] ?? 1),
@@ -42,7 +48,7 @@ else {
          LEFT JOIN usuarios u ON u.id = e.usuario_id
          WHERE e.id = ? LIMIT 1"
     );
-    $stmt->execute([$id]);
+    $stmt->execute([id]);
     $dados = $stmt->fetch();
     if ($dados) $item_id = $dados['item_id'];
 }
@@ -51,7 +57,7 @@ if (!$dados || $item_id <= 0) {
     die("Dados insuficientes para gerar o recibo.");
 }
 
-// Se for avulso, precisamos buscar os dados do item separadamente
+// Se for avulso, buscar dados do item
 if (!isset($dados['item_nome'])) {
     $stmtItem = $pdo->prepare("SELECT nome, numero_serie, numero_patrimonio FROM itens WHERE id = ?");
     $stmtItem->execute([$item_id]);
@@ -64,6 +70,14 @@ if (!isset($dados['item_nome'])) {
         die("Item não encontrado.");
     }
 }
+
+// --- PROCESSAR TAGS NO TEMPLATE ---
+$mapaTags = [
+    '{solicitante}' => $dados['solicitante'],
+    '{setor}'       => $dados['setor_destino']
+];
+$txtDeclaracaoFinal = strtr($txtDeclaracao, $mapaTags);
+$txtCompromissoFinal = strtr($txtCompromisso, $mapaTags);
 
 // Configurações do PDF
 class MYPDF extends TCPDF {
@@ -99,10 +113,7 @@ $pdf->SetFont('helvetica', '', 11);
 
 $html = '
 <br><br>
-<p style="text-align: justify;">
-    Eu, <b>' . htmlspecialchars($dados['solicitante']) . '</b>, lotado(a) no setor <b>' . htmlspecialchars($dados['setor_destino']) . '</b>, 
-    declaro para os devidos fins que recebi do Setor de TI o(s) material(is) abaixo relacionado(s) em perfeito estado de conservação e funcionamento:
-</p>
+<p style="text-align: justify;">' . nl2br(htmlspecialchars($txtDeclaracaoFinal)) . '</p>
 
 <table cellpadding="5" border="1" style="width: 100%;">
     <tr style="background-color: #f2f2f2; font-weight: bold;">
@@ -123,10 +134,7 @@ $html = '
     <b>Observações:</b> ' . htmlspecialchars($dados['observacoes'] ?? 'Nenhuma.') . '
 </p>
 
-<p style="text-align: justify;">
-    Comprometo-me a zelar pela guarda e conservação do referido material, bem como utilizá-lo exclusivamente para fins profissionais, 
-    estando ciente de que deverei devolvê-lo nas mesmas condições em que foi recebido.
-</p>
+<p style="text-align: justify;">' . nl2br(htmlspecialchars($txtCompromissoFinal)) . '</p>
 
 <br><br>
 <p style="text-align: right;">' . CIDADE_ESTADO . ', ' . date('d') . ' de ' . getMesExtenso(date('m')) . ' de ' . date('Y') . '.</p>

@@ -200,8 +200,12 @@ $isActive = fn(string $page): string => ($activePage === $page) ? 'active' : '';
                     <i class="fas fa-clipboard-list me-2 fa-fw"></i>Log de Auditoria
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="<?= BASE_URL ?>/pages/admin/zerar.php"
+            <li class="nav-item">                <a href="<?= BASE_URL ?>/pages/admin/configurar_recibo.php"
+                   class="sidebar-link rounded ps-4 <?= $isActive('admin_recibo') ?>">
+                    <i class="fas fa-file-signature me-2 fa-fw"></i>Template Recibo
+                </a>
+            </li>
+            <li class="nav-item">                <a href="<?= BASE_URL ?>/pages/admin/zerar.php"
                    class="sidebar-link rounded <?= $isActive('zerar') ?>"
                    style="color:#ff6b6b !important;">
                     <i class="fas fa-trash-alt me-2 fa-fw"></i>Zerar Sistema
