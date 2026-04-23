@@ -24,5 +24,8 @@ define('APP_NAME',     'TI Stock');
 define('APP_SUBTITLE', 'Controle de Estoque – Setor de TI');
 define('APP_VERSION',  '1.0.0');
 
+// Localização para recibos e documentos
+define('CIDADE_ESTADO', 'Recife/PE');
+
 // Fuso horário padrão
 date_default_timezone_set('America/Sao_Paulo');

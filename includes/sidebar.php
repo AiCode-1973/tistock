@@ -108,6 +108,12 @@ $isActive = fn(string $page): string => ($activePage === $page) ? 'active' : '';
                     <i class="fas fa-plus-circle me-2 fa-fw"></i>Novo Empréstimo
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="<?= BASE_URL ?>/pages/emprestimos/recibos.php"
+                   class="sidebar-link rounded ps-4 <?= $isActive('emprestimos_recibos') ?>">
+                    <i class="fas fa-file-invoice me-2 fa-fw"></i>Recibos (Entrega)
+                </a>
+            </li>
             <?php endif; ?>
 
             <!-- ---- Relatórios ---- -->

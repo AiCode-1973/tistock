@@ -210,3 +210,14 @@ function registrarLog(
         error_log('[TI Stock] Erro ao registrar log: ' . $e->getMessage());
     }
 }
+
+/** Retorna o nome do mês por extenso. */
+function getMesExtenso(string|int $mes): string
+{
+    $meses = [
+        1 => 'Janeiro', 2 => 'Fevereiro', 3 => 'Março', 4 => 'Abril',
+        5 => 'Maio', 6 => 'Junho', 7 => 'Julho', 8 => 'Agosto',
+        9 => 'Setembro', 10 => 'Outubro', 11 => 'Novembro', 12 => 'Dezembro'
+    ];
+    return $meses[(int)$mes] ?? '';
+}
