@@ -1,47 +1,74 @@
 <?php
 /**
  * TI Stock - Gerar Recibo de Entrega de Material (PDF)
- * Utiliza o TCPDF para gerar um documento formal de entrega.
+ * Suporta geração via Empréstimo (GET id) ou Avulso (POST).
  */
 
 define('ROOT_PATH', dirname(dirname(__DIR__)));
 require_once ROOT_PATH . '/includes/init.php';
 requireLogin();
 
-// Verifica se o autoload do Composer existe (necessário para o TCPDF)
 if (!file_exists(ROOT_PATH . '/vendor/autoload.php')) {
     die("Erro: O autoload do Composer não foi encontrado. Execute 'composer install'.");
 }
 
 require_once ROOT_PATH . '/vendor/autoload.php';
 
-$id = (int)($_GET['id'] ?? 0);
-if ($id <= 0) {
-    die("ID do empréstimo inválido.");
+$dados = null;
+$item_id = 0;
+
+// MODO AVULSO (POST)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['avulso'])) {
+    $item_id = (int)$_POST['item_id'];
+    $dados = [
+        'id'                => 0, // Avulso não tem ID de banco
+        'solicitante'       => $_POST['solicitante'] ?? '',
+        'setor_destino'     => $_POST['setor_destino'] ?? '',
+        'quantidade'        => (int)($_POST['quantidade'] ?? 1),
+        'observacoes'       => $_POST['observacoes'] ?? '',
+        'tecnico_nome'      => $_SESSION['usuario_nome'] ?? 'Setor de TI'
+    ];
+} 
+// MODO EMPRÉSTIMO (GET)
+else {
+    $id = (int)($_GET['id'] ?? 0);
+    if ($id <= 0) die("ID inválido.");
+
+    $stmt = $pdo->prepare(
+        "SELECT e.*, i.id AS item_id, i.nome AS item_nome, i.numero_serie, i.numero_patrimonio, 
+                u.nome AS tecnico_nome
+         FROM emprestimos e
+         JOIN itens i ON i.id = e.item_id
+         LEFT JOIN usuarios u ON u.id = e.usuario_id
+         WHERE e.id = ? LIMIT 1"
+    );
+    $stmt->execute([$id]);
+    $dados = $stmt->fetch();
+    if ($dados) $item_id = $dados['item_id'];
 }
 
-// Busca os dados do empréstimo e do item
-$stmt = $pdo->prepare(
-    "SELECT e.*, 
-            i.nome AS item_nome, i.numero_serie, i.numero_patrimonio, i.descricao AS item_desc,
-            u.nome AS tecnico_nome
-     FROM emprestimos e
-     JOIN itens i ON i.id = e.item_id
-     LEFT JOIN usuarios u ON u.id = e.usuario_id
-     WHERE e.id = ?
-     LIMIT 1"
-);
-$stmt->execute([$id]);
-$dados = $stmt->fetch();
+if (!$dados || $item_id <= 0) {
+    die("Dados insuficientes para gerar o recibo.");
+}
 
-if (!$dados) {
-    die("Empréstimo não encontrado.");
+// Se for avulso, precisamos buscar os dados do item separadamente
+if (!isset($dados['item_nome'])) {
+    $stmtItem = $pdo->prepare("SELECT nome, numero_serie, numero_patrimonio FROM itens WHERE id = ?");
+    $stmtItem->execute([$item_id]);
+    $item = $stmtItem->fetch();
+    if ($item) {
+        $dados['item_nome'] = $item['nome'];
+        $dados['numero_serie'] = $item['numero_serie'];
+        $dados['numero_patrimonio'] = $item['numero_patrimonio'];
+    } else {
+        die("Item não encontrado.");
+    }
 }
 
 // Configurações do PDF
 class MYPDF extends TCPDF {
     public function Header() {
-        $logo_file = ROOT_PATH . '/assets/img/logo.png'; // Ajuste o caminho se necessário
+        $logo_file = ROOT_PATH . '/assets/img/logo.png';
         if (file_exists($logo_file)) {
             $this->Image($logo_file, 15, 10, 30, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         }
@@ -54,7 +81,6 @@ class MYPDF extends TCPDF {
         $this->Ln(5);
         $this->Line(15, 35, 195, 35);
     }
-
     public function Footer() {
         $this->SetY(-25);
         $this->SetFont('helvetica', 'I', 8);
@@ -64,15 +90,11 @@ class MYPDF extends TCPDF {
 }
 
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
 $pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('TI Stock');
-$pdf->SetTitle('Recibo de Entrega #' . str_pad($dados['id'], 6, '0', STR_PAD_LEFT));
-
+$pdf->SetTitle('Recibo de Entrega');
 $pdf->SetMargins(15, 40, 15);
 $pdf->SetAutoPageBreak(TRUE, 25);
 $pdf->AddPage();
-
 $pdf->SetFont('helvetica', '', 11);
 
 $html = '
@@ -129,5 +151,4 @@ $html = '
 ';
 
 $pdf->writeHTML($html, true, false, true, false, '');
-
-$pdf->Output('recibo_entrega_' . $dados['id'] . '.pdf', 'I');
+$pdf->Output('recibo_entrega.pdf', 'I');

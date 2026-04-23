@@ -47,6 +47,9 @@ require_once ROOT_PATH . '/includes/header.php';
 
 <div class="d-flex align-items-center justify-content-between mb-4">
     <h4 class="fw-bold mb-0"><i class="fas fa-file-invoice me-2 text-primary"></i>Recibos de Entrega de Material</h4>
+    <a href="<?= BASE_URL ?>/pages/emprestimos/emitir_recibo_avulso.php" class="btn btn-success btn-sm">
+        <i class="fas fa-plus me-1"></i>Emitir Recibo Avulso
+    </a>
 </div>
 
 <div class="alert alert-info border-0 shadow-sm mb-4">
