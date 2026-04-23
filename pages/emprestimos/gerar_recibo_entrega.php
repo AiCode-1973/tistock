@@ -117,16 +117,12 @@ $html = '
 
 <table cellpadding="5" border="1" style="width: 100%;">
     <tr style="background-color: #f2f2f2; font-weight: bold;">
-        <th width="10%">Qtd.</th>
-        <th width="45%">Descrição do Item</th>
-        <th width="25%">Patrimônio</th>
-        <th width="20%">Nº Série</th>
+        <th width="15%" style="text-align: center;">Qtd.</th>
+        <th width="85%">Descrição do Item</th>
     </tr>
     <tr>
-        <td width="10%" style="text-align: center;">' . $dados['quantidade'] . '</td>
-        <td width="45%">' . htmlspecialchars($dados['item_nome']) . '</td>
-        <td width="25%">' . htmlspecialchars($dados['numero_patrimonio'] ?? 'N/A') . '</td>
-        <td width="20%">' . htmlspecialchars($dados['numero_serie'] ?? 'N/A') . '</td>
+        <td width="15%" style="text-align: center;">' . $dados['quantidade'] . '</td>
+        <td width="85%">' . htmlspecialchars($dados['item_nome']) . '</td>
     </tr>
 </table>
 
